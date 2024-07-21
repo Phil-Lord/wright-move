@@ -1,7 +1,14 @@
 import requests
 
 
-def get_linley_and_simpson_properties():
+def get_linley_and_simpson_properties() -> dict[str, str]:
+    '''
+    Get Linley and Simpson rental properties in Harrogate below £900pcm.
+
+    :return dict[str, str]: A dictionary of property display addresses to urls.
+    '''
+
+    # Create POST request for properties
     url = 'https://w73nr8xhev-dsn.algolia.net/1/indexes/prod_properties/query'
     params = {
         'x-algolia-agent': 'Algolia for JavaScript (4.24.0); Browser (lite)',
@@ -14,12 +21,12 @@ def get_linley_and_simpson_properties():
         'page': 0,
         'hitsPerPage': 20
     }
-
     response = requests.post(url, params=params, json=data)
 
     properties = {}
 
     if response.status_code == 200:
+        # Extract display address and url from response
         hits = response.json()['hits']
         for i in range(0, len(hits)):
             property = hits[i]
