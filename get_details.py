@@ -18,7 +18,10 @@ response = requests.post(url, params=params, json=data)
 if response.status_code == 200:
     hits = response.json()['hits']
     for i in range(0, len(hits)):
-        print(hits[i]['display_address'])
+        property = hits[i]
+        property_name = property['display_address']
+        property_url = f'https://www.linleyandsimpson.co.uk/property-to-rent/{property["slug"]}-{property["objectID"]}'
+        print(f'{property_name}\n{property_url}\n')
 else:
     print(f"Request failed with status code {response.status_code}")
     print(response.text)
