@@ -54,16 +54,16 @@ Not public-facing — personal use only.
 
 Table: `listings`
 
-| Column       | Type        | Notes                                      |
-|--------------|-------------|--------------------------------------------|
-| id           | text        | Primary key — stable hash of agency + url  |
-| agency       | text        |                                            |
-| title        | text        |                                            |
-| price        | integer     | Monthly rent in pence (avoid float)        |
-| bedrooms     | integer     |                                            |
-| url          | text        |                                            |
-| image_url    | text        |                                            |
-| scraped_at   | timestamptz | Set by scraper — use UTC                   |
+| Column       | Type        | Notes                                             |
+|--------------|-------------|---------------------------------------------------|
+| id           | text        | Primary key — stable hash of agency + url         |
+| agency       | text        |                                                   |
+| title        | text        |                                                   |
+| price        | int4        | Monthly rent in pence (not numeric — avoid float) |
+| bedrooms     | integer     |                                                   |
+| url          | text        |                                                   |
+| image_url    | text        |                                                   |
+| scraped_at   | timestamptz | Set by scraper — use UTC                          |
 
 - RLS is enabled.
 - Anonymous reads are allowed (anon key is read-only).
@@ -92,6 +92,8 @@ Table: `listings`
   one broken site doesn't kill the run.
 - Use `httpx` by default; only reach for Playwright if a site requires JS rendering.
 - Upsert via Supabase's `upsert` with `on_conflict='id'`.
+- **User-Agent policy**: send the honest `wright-move-scraper/<version> (personal use)` UA from
+  `http.py`. Switch to a browser UA only for specific sites that block non-browser clients.
 
 ### Style
 
@@ -108,6 +110,24 @@ Table: `listings`
 - **String-compatible enums** for serialised values — `class Thing(str, Enum):`.
 - **`datetime`** must be timezone-aware UTC.
 - **Imports**: stdlib → third-party → local, separated by blank lines.
+
+---
+
+## Running the Scraper Locally
+
+```bash
+cd scraper
+cp .env.example .env       # then fill in the values below
+uv sync
+uv run python -m scraper
+```
+
+Required environment variables (read by `settings.load_settings()`):
+
+- `SUPABASE_URL` — Supabase project URL.
+- `SUPABASE_SERVICE_KEY` — service-role key (write access — never commit, never expose to frontend).
+
+In GitHub Actions these come from repo secrets; `.env` is for local dev only and is gitignored.
 
 ---
 
