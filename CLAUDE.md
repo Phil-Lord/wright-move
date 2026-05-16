@@ -92,6 +92,11 @@ Table: `listings`
   one broken site doesn't kill the run.
 - Use `httpx` by default; only reach for Playwright if a site requires JS rendering.
 - Upsert via Supabase's `upsert` with `on_conflict='id'`.
+- **Filter at the source**: when an agency's search UI exposes filters (`bedrooms=`, `maxprice=`,
+  property type, "available only" toggles, etc.), bake them into the agency's `QUERY` constant
+  rather than scraping everything and post-filtering. Keeps the DB lean, cuts pages walked, and
+  makes one source of truth for "what's eligible". Personal thresholds live as constants in the
+  agency module (e.g. `bedrooms=1&maxprice=1100` in `fss.py`).
 - **User-Agent policy**: send the honest `wright-move-scraper/<version> (personal use)` UA from
   `http.py`. Switch to a browser UA only for specific sites that block non-browser clients.
 
