@@ -1,4 +1,4 @@
-# CLAUDE.md — Harrogate Rentals Aggregator
+# CLAUDE.md — Wright Move (Harrogate Rentals Aggregator)
 
 A personal web app that aggregates rental listings from ~15 Harrogate letting agencies into a single filterable view.
 Not public-facing — personal use only.
@@ -9,13 +9,23 @@ Not public-facing — personal use only.
 
 ```
 /
-├── frontend/          # Vite + React + TypeScript (hosted on Netlify)
-├── scraper/           # Python scraper (httpx + BeautifulSoup / Playwright)
+├── frontend/                       # Vite + React + TypeScript (hosted on Netlify)
+├── scraper/
+│   ├── pyproject.toml
+│   ├── .env.example
+│   ├── src/scraper/
+│   │   ├── main.py                 # orchestrator: run scrapers → upsert
+│   │   ├── models.py               # RawListing, Listing, Pence, Agency
+│   │   ├── http.py                 # shared httpx.Client factory
+│   │   ├── store.py                # stamp() + Supabase upsert
+│   │   ├── settings.py             # env loading
+│   │   └── agencies/               # one module per agency, registered in __init__
+│   └── tests/
 ├── netlify/
-│   └── functions/     # Netlify Function for manual refresh trigger
+│   └── functions/                  # Netlify Function for manual refresh trigger
 └── .github/
     └── workflows/
-        └── scrape.yml # Scheduled + manual GitHub Actions workflow
+        └── scrape.yml              # Scheduled + manual GitHub Actions workflow
 ```
 
 ---
@@ -32,8 +42,9 @@ Not public-facing — personal use only.
 
 ## Data Flow
 
-1. GitHub Actions triggers `scraper/main.py` on schedule or manual dispatch
-2. Scraper upserts listings into Supabase using the service key
+1. GitHub Actions runs `python -m scraper` on schedule or manual dispatch
+2. Each agency scraper returns `RawListing`s; the orchestrator stamps `id` + `scraped_at`
+   and upserts via Supabase using the service key
 3. React frontend queries Supabase directly using the anon key (read-only)
 4. Manual refresh button calls a Netlify Function, which triggers the workflow via GitHub API
 
@@ -62,9 +73,28 @@ Table: `listings`
 
 ## Scraper Conventions
 
-- `id` should be a stable hash: `hashlib.md5(f"{agency}:{url}".encode()).hexdigest()`
-- Use `httpx` by default; only reach for Playwright if the site requires JS rendering
-- Upsert using Supabase's `upsert` with `on_conflict="id"`
+### Architecture
+
+- **Two-stage models**: scrapers return `RawListing` (what the site shows); the orchestrator
+  in `main.py` calls `store.stamp()` to attach `id` + `scraped_at`, producing a `Listing`
+  ready for upsert. Scrapers don't compute the id themselves.
+- **`Agency` enum** (in `models.py`) — every agency gets a string-valued enum member, used
+  as the `Scraper.agency` attribute and serialised straight to the DB column.
+- **`Pence = NewType('Pence', int)`** in `models.py` is the money type. Avoid float.
+- **Each agency module** lives in `src/scraper/agencies/<agency>.py` and exposes a class
+  implementing the `Scraper` protocol (`agency: Agency`, `scrape(client) -> list[RawListing]`).
+  Register the instance in `agencies/__init__.SCRAPERS`.
+- **Split `fetch` from `parse`** inside each agency module so `parse(html: str) -> list[RawListing]`
+  is a pure function, unit-testable against saved HTML fixtures.
+- **Shared `httpx.Client`** from `http.build_client()` is passed into every scrape call — one
+  pool, shared UA + timeouts.
+- **Per-agency error isolation**: the orchestrator wraps each scraper + upsert in try/except so
+  one broken site doesn't kill the run.
+- Use `httpx` by default; only reach for Playwright if a site requires JS rendering.
+- Upsert via Supabase's `upsert` with `on_conflict='id'`.
+
+### Style
+
 - **Python 3.12+ syntax** — `str | None`, `list[Trade]`, `dict[str, Any]`. Never `Optional`,
   `Union`, `List`, `Dict` from `typing`.
 - **Single quotes** for all strings, including docstrings.
@@ -76,7 +106,6 @@ Table: `listings`
 - **Frozen dataclasses for domain models** — `@dataclass(frozen=True)`. Required fields first,
   defaulted last. `field(default_factory=...)` for mutable defaults.
 - **String-compatible enums** for serialised values — `class Thing(str, Enum):`.
-- **Type for money** needs defining.
 - **`datetime`** must be timezone-aware UTC.
 - **Imports**: stdlib → third-party → local, separated by blank lines.
 
