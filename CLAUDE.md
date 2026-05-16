@@ -103,6 +103,9 @@ Table: `listings`
 - Adding new dependencies (`uv add <package>` — don't hand-edit `pyproject.toml`)
 - Modifying `.env`, Dockerfile, or anything deployment-shaped
 
+Detailed conventions for testing and docstrings live in `.claude/rules/` — load
+the relevant file when working in that area.
+
 ---
 
 ## Current MVP Scope
