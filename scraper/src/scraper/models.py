@@ -9,6 +9,8 @@ Pence = NewType('Pence', int)
 class Agency(str, Enum):
     ''' Letting agencies we scrape. String-valued for Supabase serialisation. '''
 
+    FSS = 'fss'
+
 
 @dataclass(frozen=True)
 class RawListing:

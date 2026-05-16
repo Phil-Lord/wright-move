@@ -2,6 +2,7 @@ from typing import Protocol
 
 import httpx
 
+from scraper.agencies.fss import FSS
 from scraper.models import Agency, RawListing
 
 
@@ -13,4 +14,4 @@ class Scraper(Protocol):
         ...
 
 
-SCRAPERS: list[Scraper] = []
+SCRAPERS: list[Scraper] = [FSS()]
