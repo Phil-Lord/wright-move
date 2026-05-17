@@ -1,7 +1,8 @@
 # CLAUDE.md — Wright Move (Harrogate Rentals Aggregator)
 
-A personal web app that aggregates rental listings from ~15 Harrogate letting agencies into a single filterable view.
-Not public-facing — personal use only.
+A personal web app that aggregates rental listings from ~15 Harrogate letting agencies into a
+single filterable view. Source is public, but the deployment is for personal use
+only — not advertised, not shared, and not intended as a service for anyone else.
 
 ---
 
