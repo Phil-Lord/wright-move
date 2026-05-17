@@ -97,7 +97,7 @@ Table: `listings`
   property type, "available only" toggles, etc.), bake them into the agency's `QUERY` constant
   rather than scraping everything and post-filtering. Keeps the DB lean, cuts pages walked, and
   makes one source of truth for "what's eligible". Personal thresholds live as constants in the
-  agency module (e.g. `bedrooms=1&maxprice=1100` in `fss.py`).
+  agency module (e.g. a `QUERY = 'bedrooms=1&maxprice=1100'` string baked into the search URL).
 - **User-Agent policy**: send the honest `wright-move-scraper/<version> (personal use)` UA from
   `http.py`. Switch to a browser UA only for specific sites that block non-browser clients.
 - **robots.txt**: check each agency's `robots.txt` before adding a scraper. If a path is

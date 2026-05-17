@@ -19,7 +19,7 @@ Reference for TypeScript code in this project (currently `frontend/` only).
 ## `interface` vs `type`
 
 - **`interface`** for object shapes (`Listing`, props, return shapes).
-- **`type`** for unions, intersections, and aliases (`Agency = 'fss' | 'belvoir'`,
+- **`type`** for unions, intersections, and aliases (`Agency = 'agency_a' | 'agency_b'`,
   string literal unions, mapped types).
 
 Both work for objects, but splitting them this way makes the intent legible at a glance.
