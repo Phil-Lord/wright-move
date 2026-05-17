@@ -100,6 +100,9 @@ Table: `listings`
   agency module (e.g. `bedrooms=1&maxprice=1100` in `fss.py`).
 - **User-Agent policy**: send the honest `wright-move-scraper/<version> (personal use)` UA from
   `http.py`. Switch to a browser UA only for specific sites that block non-browser clients.
+- **robots.txt**: check each agency's `robots.txt` before adding a scraper. If a path is
+  disallowed for the catch-all (`User-agent: *`) crawler, don't scrape it — pick a different
+  entrypoint or skip the agency. Re-check when adding new URL patterns to an existing agency.
 
 ### Style
 
