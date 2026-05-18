@@ -12,7 +12,7 @@ def run() -> None:
     ''' Run every registered scraper, isolating failures per agency. '''
     settings = load_settings()
     db_client = build_db_client(settings)
-    scraped_at = now_utc()
+    last_seen = now_utc()
 
     with build_http_client() as http_client:
         for scraper in SCRAPERS:
@@ -23,7 +23,7 @@ def run() -> None:
                 logger.exception('scrape failed: %s', agency)
                 continue
 
-            listings = [stamp(raw, scraped_at) for raw in raw_listings]
+            listings = [stamp(raw, last_seen) for raw in raw_listings]
             try:
                 upsert(db_client, listings)
                 logger.info('upserted %d listings: %s', len(listings), agency)

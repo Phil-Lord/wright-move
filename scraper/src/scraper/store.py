@@ -17,8 +17,8 @@ def now_utc() -> datetime:
     return datetime.now(UTC)
 
 
-def stamp(raw: RawListing, scraped_at: datetime) -> Listing:
-    ''' Attach the storage fields (id, scraped_at) to a RawListing. '''
+def stamp(raw: RawListing, last_seen: datetime) -> Listing:
+    ''' Attach the storage fields (id, last_seen) to a RawListing. '''
     listing_id = hashlib.md5(f'{raw.agency.value}:{raw.url}'.encode()).hexdigest()
     return Listing(
         id=listing_id,
@@ -27,13 +27,20 @@ def stamp(raw: RawListing, scraped_at: datetime) -> Listing:
         price=raw.price,
         bedrooms=raw.bedrooms,
         url=raw.url,
-        scraped_at=scraped_at,
+        last_seen=last_seen,
         image_url=raw.image_url,
     )
 
 
 def upsert(client: Client, listings: list[Listing]) -> None:
-    ''' Upsert listings into the `listings` table, keyed by id. '''
+    '''
+    Upsert listings into the `listings` table, keyed by id.
+
+    `first_seen` is deliberately omitted from the payload as the DB column has a
+    `default now()` for inserts, and PostgREST's upsert leaves columns absent
+    from the body untouched on conflict — so the original value is preserved
+    across subsequent scrapes.
+    '''
     if not listings:
         return
     rows = [
@@ -45,7 +52,7 @@ def upsert(client: Client, listings: list[Listing]) -> None:
             'bedrooms': listing.bedrooms,
             'url': listing.url,
             'image_url': listing.image_url,
-            'scraped_at': listing.scraped_at.isoformat(),
+            'last_seen': listing.last_seen.isoformat(),
         }
         for listing in listings
     ]

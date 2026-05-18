@@ -46,8 +46,12 @@ class Listing:
         price (Pence): Monthly rent in pence.
         bedrooms (int): Number of bedrooms.
         url (str): Direct link to the agency's listing page.
-        scraped_at (datetime): UTC timestamp of the scrape that produced this row.
+        last_seen (datetime): UTC timestamp of the most recent scrape that saw this row.
         image_url (str | None): Primary listing image, if present.
+
+    Note:
+        `first_seen` is DB-managed (default now() on insert, preserved on conflict)
+        and is intentionally excluded — the scraper neither sets nor reads it.
     '''
 
     id: str
@@ -56,5 +60,5 @@ class Listing:
     price: Pence
     bedrooms: int
     url: str
-    scraped_at: datetime
+    last_seen: datetime
     image_url: str | None = None
