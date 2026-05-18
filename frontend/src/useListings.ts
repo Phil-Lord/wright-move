@@ -38,7 +38,7 @@ export function useListings(): UseListingsResult {
     supabase
       .from('listings')
       .select('*')
-      .order('price', { ascending: true })
+      .order('first_seen', { ascending: false })
       .then(({ data, error }) => {
         if (cancelled) return
         if (error) {
