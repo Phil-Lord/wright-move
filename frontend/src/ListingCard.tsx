@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { formatPrice } from './format'
 import type { Listing } from './types'
 
@@ -6,6 +8,12 @@ interface ListingCardProps {
 }
 
 export function ListingCard({ listing }: ListingCardProps) {
+  const [imageBroken, setImageBroken] = useState(false)
+
+  // A broken image is a decent signal the listing has been delisted;
+  // hide the card rather than show a link likely to 404.
+  if (imageBroken) return null
+
   return (
     <a
       className="card"
@@ -14,7 +22,13 @@ export function ListingCard({ listing }: ListingCardProps) {
       rel="noopener noreferrer"
     >
       {listing.image_url ? (
-        <img className="card-image" src={listing.image_url} alt="" loading="lazy" />
+        <img
+          className="card-image"
+          src={listing.image_url}
+          alt=""
+          loading="lazy"
+          onError={() => setImageBroken(true)}
+        />
       ) : (
         <div className="card-image card-image-placeholder">{listing.agency}</div>
       )}
