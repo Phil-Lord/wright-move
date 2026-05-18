@@ -2,6 +2,9 @@
   base = "frontend"
   command = "pnpm install --frozen-lockfile && pnpm build"
   publish = "dist"
+  # Default change-detection only watches the base dir; widen it so edits to
+  # functions or the toml also trigger a deploy. Exit 0 = skip, non-zero = build.
+  ignore = "git diff --quiet HEAD^ HEAD -- . ../netlify ../netlify.toml"
 
 [functions]
   directory = "../netlify/functions"
