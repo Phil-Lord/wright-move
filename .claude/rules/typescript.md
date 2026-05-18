@@ -41,7 +41,7 @@ is worse than a hand-written interface.
 
 ## Database column names
 
-Keep DB columns as **snake_case** in TS types (`image_url`, `scraped_at`). Supabase
+Keep DB columns as **snake_case** in TS types (`image_url`, `last_seen`). Supabase
 returns them snake_case over the wire — renaming to camelCase means a transform
 layer for no real benefit. Treat the type as a description of the wire shape.
 

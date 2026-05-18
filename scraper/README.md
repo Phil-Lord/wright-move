@@ -17,7 +17,7 @@ See `/CLAUDE.md` (root) for the full architecture and style rules, plus
 `.claude/rules/python-testing.md` and `.claude/rules/python-docstrings.md`. Highlights:
 
 - Python 3.12+ syntax (`str | None`, `list[T]`), single quotes, British English, 100-char lines.
-- Two-stage models: agencies return `RawListing`; the orchestrator stamps `id` + `scraped_at`
+- Two-stage models: agencies return `RawListing`; the orchestrator stamps `id` + `last_seen`
   to produce a `Listing` ready for upsert.
 - Each agency is a module in `src/scraper/agencies/<agency>.py` exposing a `Scraper` (an
   `agency: Agency` attribute and `scrape(client) -> list[RawListing]`), registered in

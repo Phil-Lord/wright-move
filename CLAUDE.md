@@ -44,7 +44,7 @@ only — not advertised, not shared, and not intended as a service for anyone el
 ## Data Flow
 
 1. GitHub Actions runs `python -m scraper` on schedule or manual dispatch
-2. Each agency scraper returns `RawListing`s; the orchestrator stamps `id` + `scraped_at`
+2. Each agency scraper returns `RawListing`s; the orchestrator stamps `id` + `last_seen`
    and upserts via Supabase using the service key
 3. React frontend queries Supabase directly using the anon key (read-only)
 4. Manual refresh button calls a Netlify Function, which triggers the workflow via GitHub API
@@ -64,7 +64,8 @@ Table: `listings`
 | bedrooms     | integer     |                                                   |
 | url          | text        |                                                   |
 | image_url    | text        |                                                   |
-| scraped_at   | timestamptz | Set by scraper — use UTC                          |
+| first_seen   | timestamptz | DB-managed: `default now()` on insert, preserved on conflict |
+| last_seen    | timestamptz | Set by scraper — UTC, refreshed every run         |
 
 - RLS is enabled.
 - Anonymous reads are allowed (anon key is read-only).
@@ -77,8 +78,9 @@ Table: `listings`
 ### Architecture
 
 - **Two-stage models**: scrapers return `RawListing` (what the site shows); the orchestrator
-  in `main.py` calls `store.stamp()` to attach `id` + `scraped_at`, producing a `Listing`
-  ready for upsert. Scrapers don't compute the id themselves.
+  in `main.py` calls `store.stamp()` to attach `id` + `last_seen`, producing a `Listing`
+  ready for upsert. Scrapers don't compute the id themselves. `first_seen` is DB-managed
+  (default `now()` on insert, untouched on conflict) and isn't part of the Python model.
 - **`Agency` enum** (in `models.py`) — every agency gets a string-valued enum member, used
   as the `Scraper.agency` attribute and serialised straight to the DB column.
 - **`Pence = NewType('Pence', int)`** in `models.py` is the money type. Avoid float.
