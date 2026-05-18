@@ -1,9 +1,8 @@
 name: scrape
 
 on:
-  schedule:
-    # Every 30 minutes between 08:00 and 18:00 UTC
-    - cron: '0,30 8-18 * * *'
+  # Triggered by Netlify scheduled function (and the manual refresh function);
+  # GitHub Actions' own cron is too unreliable (skips slots under load).
   workflow_dispatch:
 
 concurrency:
