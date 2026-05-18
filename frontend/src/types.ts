@@ -8,5 +8,6 @@ export interface Listing {
   bedrooms: number
   url: string
   image_url: string | null
-  scraped_at: string  // ISO 8601 from Postgres timestampz
+  first_seen: string  // ISO 8601 — when the scraper first saw this listing
+  last_seen: string   // ISO 8601 — most recent scrape that saw this listing
 }
