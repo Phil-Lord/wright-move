@@ -79,6 +79,13 @@ body {
   font-size: 0.95rem;
 }
 
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
 .status-error {
   color: var(--error);
 }

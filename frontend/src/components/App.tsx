@@ -1,5 +1,7 @@
+import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 import { useMemo, useState } from 'react'
 
+import loadingDog from '../assets/loading-dog.lottie?url'
 import { useListings } from '../hooks/useListings'
 import { sortListings, type SortOption } from '../lib/sort'
 import { Header } from './Header'
@@ -15,7 +17,16 @@ function App() {
     <>
       <Header sort={sort} onSortChange={setSort} />
       <main className="main">
-        {loading && <p className="status">Loading…</p>}
+        {loading && (
+          <div className="loading">
+            <DotLottieReact
+              src={loadingDog}
+              loop
+              autoplay
+              style={{ width: 650, height: 650 }}
+            />
+          </div>
+        )}
         {error && <p className="status status-error">Failed to load: {error}</p>}
         {!loading && !error && sortedListings.length === 0 && (
           <p className="status">No listings yet.</p>
