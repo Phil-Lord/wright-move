@@ -4,6 +4,7 @@ export type Agency =
   | 'linley_and_simpson'
   | 'martin_and_co'
   | 'verity_frearson'
+  | 'william_h_brown'
 
 export const AGENCY_NAMES: Record<Agency, string> = {
   belvoir: 'Belvoir',
@@ -11,6 +12,7 @@ export const AGENCY_NAMES: Record<Agency, string> = {
   linley_and_simpson: 'Linley & Simpson',
   martin_and_co: 'Martin & Co',
   verity_frearson: 'Verity Frearson',
+  william_h_brown: 'William H Brown',
 }
 
 export interface Listing {
