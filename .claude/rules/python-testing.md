@@ -133,3 +133,12 @@ def sample_listing(self) -> Listing:
         ...
     )
 ```
+
+---
+
+## Scraper fixtures
+
+Hand-curate scraper fixtures (`tests/fixtures/`) down to the minimum needed for the
+assertions — typically 2–3 stripped cards in a basic HTML/JSON shell. Don't commit raw
+site dumps: they bloat the repo, leak content beyond fair-use needs, and make tests
+harder to read. See `fss.html` and `linley_and_simpson.json` for the target shape.
