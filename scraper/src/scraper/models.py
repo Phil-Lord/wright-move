@@ -10,6 +10,7 @@ class Agency(str, Enum):
     ''' Letting agencies we scrape. String-valued for Supabase serialisation. '''
 
     FSS = 'fss'
+    LINLEY_AND_SIMPSON = 'linley_and_simpson'
 
 
 @dataclass(frozen=True)
