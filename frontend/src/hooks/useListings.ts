@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import { supabase } from './supabase'
-import type { Listing } from './types'
+import { supabase } from '../lib/supabase'
+import type { Listing } from '../types'
 
 interface UseListingsResult {
   listings: Listing[]

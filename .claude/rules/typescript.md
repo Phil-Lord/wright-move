@@ -59,7 +59,7 @@ as `string | null` so the type matches the runtime value. `string | null` and
 
 Prices are stored as **pence** (`int4` in Postgres), typed as `number` in TS. Don't
 introduce a branded `Pence` type — the ceremony isn't worth it for a single money
-field. Centralise the "this is pence" knowledge in `src/format.ts::formatPrice`.
+field. Centralise the "this is pence" knowledge in `src/lib/format.ts::formatPrice`.
 
 ---
 

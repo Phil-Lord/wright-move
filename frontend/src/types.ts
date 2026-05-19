@@ -1,8 +1,9 @@
-export type Agency = 'fss' | 'linley_and_simpson'
+export type Agency = 'fss' | 'linley_and_simpson' | 'verity_frearson'
 
 export const AGENCY_NAMES: Record<Agency, string> = {
   fss: 'FSS',
   linley_and_simpson: 'Linley & Simpson',
+  verity_frearson: 'Verity Frearson',
 }
 
 export interface Listing {

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-import { formatPrice } from './format'
+import { formatPrice } from '../lib/format'
+import { AGENCY_NAMES, type Listing } from '../types'
 import { ShareButton } from './ShareButton'
-import { AGENCY_NAMES, type Listing } from './types'
 
 interface ListingCardProps {
   listing: Listing

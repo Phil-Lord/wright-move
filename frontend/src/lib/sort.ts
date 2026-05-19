@@ -1,4 +1,4 @@
-import type { Listing } from './types'
+import type { Listing } from '../types'
 
 export type SortOption = 'newest' | 'price-asc' | 'price-desc'
 

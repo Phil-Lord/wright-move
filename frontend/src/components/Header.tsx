@@ -1,4 +1,4 @@
-import { SORT_OPTIONS, type SortOption } from './sort'
+import { SORT_OPTIONS, type SortOption } from '../lib/sort'
 
 interface HeaderProps {
   sort: SortOption

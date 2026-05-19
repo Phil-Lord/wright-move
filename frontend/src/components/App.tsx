@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 
+import { useListings } from '../hooks/useListings'
+import { sortListings, type SortOption } from '../lib/sort'
 import { Header } from './Header'
 import { ListingCard } from './ListingCard'
-import { sortListings, type SortOption } from './sort'
-import { useListings } from './useListings'
 
 function App() {
   const { listings, loading, error } = useListings()
