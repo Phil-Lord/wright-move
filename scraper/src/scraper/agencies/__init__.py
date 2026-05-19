@@ -4,6 +4,7 @@ import httpx
 
 from scraper.agencies.fss import FSS
 from scraper.agencies.linley_and_simpson import LinleyAndSimpson
+from scraper.agencies.verity_frearson import VerityFrearson
 from scraper.models import Agency, RawListing
 
 
@@ -15,4 +16,4 @@ class Scraper(Protocol):
         ...
 
 
-SCRAPERS: list[Scraper] = [FSS(), LinleyAndSimpson()]
+SCRAPERS: list[Scraper] = [FSS(), LinleyAndSimpson(), VerityFrearson()]

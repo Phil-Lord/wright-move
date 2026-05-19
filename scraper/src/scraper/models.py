@@ -11,6 +11,7 @@ class Agency(str, Enum):
 
     FSS = 'fss'
     LINLEY_AND_SIMPSON = 'linley_and_simpson'
+    VERITY_FREARSON = 'verity_frearson'
 
 
 @dataclass(frozen=True)
