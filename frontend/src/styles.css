@@ -177,6 +177,7 @@ body {
 }
 
 .card-body {
+  flex: 1;
   padding: 0.85rem 1rem 1rem;
   display: flex;
   flex-direction: column;
@@ -203,7 +204,10 @@ body {
 .card-meta {
   display: flex;
   justify-content: space-between;
-  margin-top: 0.25rem;
+  /* Pin the bed/agency row to the bottom so it lines up regardless of
+     how many lines the title wraps to. */
+  margin-top: auto;
+  padding-top: 0.25rem;
   color: var(--muted);
   font-size: 0.85rem;
 }
