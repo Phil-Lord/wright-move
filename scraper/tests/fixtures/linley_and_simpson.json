@@ -1,0 +1,30 @@
+{
+  "hits": [
+    {
+      "objectID": "69fb05989c4d13cbd580c110",
+      "slug": "2-bedroom-apartment-to-rent-in-station-parade-harrogate-north-yorkshire-hg1",
+      "display_address": "Station Parade, Harrogate, North Yorkshire, HG1",
+      "price": 1100,
+      "price_qualifier": "pcm",
+      "bedroom": 2,
+      "images": [
+        {
+          "url": "https://ggfx-linleyandsimpson.s3.eu-west-2.amazonaws.com/i/property/SHL260042/images/loc/live/pictures/SHL/26/SHL260042_14.jpg"
+        }
+      ]
+    },
+    {
+      "objectID": "676596dc4605f3ef5dbd68a5",
+      "slug": "2-bedroom-apartment-to-rent-in-the-courtyard-devonshire-lane-harrogate-north-yorkshire-hg1",
+      "display_address": "The Courtyard, Devonshire Lane, Harrogate, North Yorkshire, HG1",
+      "price": 1050,
+      "price_qualifier": "pcm",
+      "bedroom": 2,
+      "images": [
+        {
+          "url": "https://ggfx-linleyandsimpson.s3.eu-west-2.amazonaws.com/i/property/SHL240180/images/loc/live/pictures/SHL/24/SHL240180_08.jpg"
+        }
+      ]
+    }
+  ]
+}
