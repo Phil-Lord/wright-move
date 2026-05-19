@@ -9,6 +9,7 @@ Pence = NewType('Pence', int)
 class Agency(str, Enum):
     ''' Letting agencies we scrape. String-valued for Supabase serialisation. '''
 
+    BELVOIR = 'belvoir'
     FSS = 'fss'
     LINLEY_AND_SIMPSON = 'linley_and_simpson'
     VERITY_FREARSON = 'verity_frearson'

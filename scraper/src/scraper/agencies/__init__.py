@@ -2,6 +2,7 @@ from typing import Protocol
 
 import httpx
 
+from scraper.agencies.belvoir import Belvoir
 from scraper.agencies.fss import FSS
 from scraper.agencies.linley_and_simpson import LinleyAndSimpson
 from scraper.agencies.verity_frearson import VerityFrearson
@@ -16,4 +17,4 @@ class Scraper(Protocol):
         ...
 
 
-SCRAPERS: list[Scraper] = [FSS(), LinleyAndSimpson(), VerityFrearson()]
+SCRAPERS: list[Scraper] = [Belvoir(), FSS(), LinleyAndSimpson(), VerityFrearson()]
