@@ -64,3 +64,18 @@ class Letting:
 ```
 
 Single quotes for docstrings (consistent with the rest of the codebase).
+
+---
+
+## Single-line docstrings — pad with spaces
+
+Single-line docstrings get a space inside each set of quotes:
+
+```python
+''' Scraper for Whitaker Cadre lettings. '''   # correct
+'''Scraper for Whitaker Cadre lettings.'''     # wrong — no padding
+```
+
+This matches the existing codebase (e.g. the `Agency` enum and `Scraper` protocol
+docstrings). Multi-line docstrings keep the standard form — opening `'''` on its own
+line, text below.
