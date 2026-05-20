@@ -8,6 +8,7 @@ from scraper.agencies.lentin_smith import LentinSmith
 from scraper.agencies.linley_and_simpson import LinleyAndSimpson
 from scraper.agencies.martin_and_co import MartinAndCo
 from scraper.agencies.verity_frearson import VerityFrearson
+from scraper.agencies.whitaker_cadre import WhitakerCadre
 from scraper.agencies.william_h_brown import WilliamHBrown
 from scraper.models import Agency, RawListing
 
@@ -27,5 +28,6 @@ SCRAPERS: list[Scraper] = [
     LinleyAndSimpson(),
     MartinAndCo(),
     VerityFrearson(),
+    WhitakerCadre(),
     WilliamHBrown(),
 ]

@@ -5,6 +5,7 @@ export type Agency =
   | 'linley_and_simpson'
   | 'martin_and_co'
   | 'verity_frearson'
+  | 'whitaker_cadre'
   | 'william_h_brown'
 
 export const AGENCY_NAMES: Record<Agency, string> = {
@@ -14,6 +15,7 @@ export const AGENCY_NAMES: Record<Agency, string> = {
   linley_and_simpson: 'Linley & Simpson',
   martin_and_co: 'Martin & Co',
   verity_frearson: 'Verity Frearson',
+  whitaker_cadre: 'Whitaker Cadre',
   william_h_brown: 'William H Brown',
 }
 

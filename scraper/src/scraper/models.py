@@ -15,6 +15,7 @@ class Agency(str, Enum):
     LINLEY_AND_SIMPSON = 'linley_and_simpson'
     MARTIN_AND_CO = 'martin_and_co'
     VERITY_FREARSON = 'verity_frearson'
+    WHITAKER_CADRE = 'whitaker_cadre'
     WILLIAM_H_BROWN = 'william_h_brown'
 
 
