@@ -344,7 +344,18 @@ body {
   .grid {
     grid-template-columns: 1fr;
   }
+  .sort-label {
+    display: none;
+  }
   .header {
-    flex-wrap: wrap;
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+  .header h1 {
+    font-size: 1.1rem;
+  }
+  .header h1,
+  .toggle-hidden {
+    white-space: nowrap;
   }
 }
