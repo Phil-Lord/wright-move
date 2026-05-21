@@ -1,5 +1,5 @@
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 
 import loadingDog from '../assets/loading-dog.lottie?url'
 import { useHiddenListings } from '../hooks/useHiddenListings'
@@ -12,6 +12,21 @@ import { ListingCard } from './ListingCard'
 
 /** How long the undo prompt stays on screen after hiding a listing. */
 const UNDO_TIMEOUT_MS = 6000
+
+/** The loading dog paired with a message, used for empty and error states. */
+function DogMessage({ children }: { children: ReactNode }) {
+  return (
+    <div className="dog-message">
+      <DotLottieReact
+        src={loadingDog}
+        loop
+        autoplay
+        style={{ width: 650, height: 650 }}
+      />
+      <p className="status">{children}</p>
+    </div>
+  )
+}
 
 function App() {
   const { listings, loading, error } = useListings()
@@ -89,9 +104,13 @@ function App() {
             />
           </div>
         )}
-        {error && <p className="status status-error">Failed to load: {error}</p>}
+        {error && (
+          <DogMessage>
+            Something went wrong fetching listings. Try again in a bit — {error}
+          </DogMessage>
+        )}
         {!loading && !error && visibleListings.length === 0 && (
-          <p className="status">{showHidden ? 'No hidden listings.' : 'No listings yet.'}</p>
+          <DogMessage>Woofing to see here...</DogMessage>
         )}
         {!loading && !error && visibleListings.length > 0 && (
           <>
