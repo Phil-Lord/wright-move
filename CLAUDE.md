@@ -147,6 +147,9 @@ In GitHub Actions these come from repo secrets; `.env` is for local dev only and
 - TypeScript throughout — no `any` unless genuinely unavoidable
 - Saved/hidden listings persisted (no user accounts)
 - Web and mobile layout
+- **Use `pnpm`** for all `frontend/` package management (`pnpm install`, `pnpm add <pkg>`,
+  `pnpm build`). The project has a `pnpm-lock.yaml` — running `npm install` against the
+  pnpm-managed `node_modules` corrupts npm's dependency resolution.
 
 ---
 
@@ -160,7 +163,8 @@ In GitHub Actions these come from repo secrets; `.env` is for local dev only and
 **Ask first:**
 
 - Changing public APIs (anything re-exported from a module's `__init__.py`)
-- Adding new dependencies (`uv add <package>` — don't hand-edit `pyproject.toml`)
+- Adding new dependencies (`uv add <package>` for the scraper, `pnpm add <package>` for the
+  frontend — don't hand-edit `pyproject.toml` or `package.json`)
 - Modifying `.env`, Dockerfile, or anything deployment-shaped
 
 Detailed conventions for Python testing/docstrings and TypeScript live in

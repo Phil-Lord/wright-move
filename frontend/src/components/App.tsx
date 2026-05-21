@@ -1,18 +1,51 @@
 import { DotLottieReact } from '@lottiefiles/dotlottie-react'
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 
 import loadingDog from '../assets/loading-dog.lottie?url'
+import { useHiddenListings } from '../hooks/useHiddenListings'
 import { useListings } from '../hooks/useListings'
 import { formatRelativeTime } from '../lib/format'
 import { sortListings, type SortOption } from '../lib/sort'
+import type { Listing } from '../types'
 import { Header } from './Header'
 import { ListingCard } from './ListingCard'
 
+/** How long the undo prompt stays on screen after hiding a listing. */
+const UNDO_TIMEOUT_MS = 6000
+
+/** The loading dog paired with a message, used for empty and error states. */
+function DogMessage({ children }: { children: ReactNode }) {
+  return (
+    <div className="dog-message">
+      <DotLottieReact
+        src={loadingDog}
+        loop
+        autoplay
+        style={{ width: 650, height: 650 }}
+      />
+      <p className="status">{children}</p>
+    </div>
+  )
+}
+
 function App() {
   const { listings, loading, error } = useListings()
+  const { hiddenIds, hide, unhide } = useHiddenListings()
   const [sort, setSort] = useState<SortOption>('newest')
+  const [showHidden, setShowHidden] = useState(false)
+  const [pendingUndo, setPendingUndo] = useState<Listing | null>(null)
 
-  const sortedListings = useMemo(() => sortListings(listings, sort), [listings, sort])
+  const visibleListings = useMemo(() => {
+    const filtered = listings.filter((l) =>
+      showHidden ? hiddenIds.has(l.id) : !hiddenIds.has(l.id),
+    )
+    return sortListings(filtered, sort)
+  }, [listings, hiddenIds, showHidden, sort])
+
+  const hiddenCount = useMemo(
+    () => listings.reduce((count, l) => (hiddenIds.has(l.id) ? count + 1 : count), 0),
+    [listings, hiddenIds],
+  )
 
   const lastUpdated = useMemo(() => {
     if (listings.length === 0) return null
@@ -23,9 +56,43 @@ function App() {
     return new Date(latest).toISOString()
   }, [listings])
 
+  const handleHide = useCallback(
+    (listing: Listing) => {
+      hide(listing.id)
+      setPendingUndo(listing)
+    },
+    [hide],
+  )
+
+  const handleUnhide = useCallback(
+    (listing: Listing) => {
+      unhide(listing.id)
+      setPendingUndo(null)
+    },
+    [unhide],
+  )
+
+  const handleUndo = useCallback(() => {
+    if (pendingUndo) unhide(pendingUndo.id)
+    setPendingUndo(null)
+  }, [pendingUndo, unhide])
+
+  // Auto-dismiss the undo prompt after a few seconds.
+  useEffect(() => {
+    if (!pendingUndo) return
+    const timer = setTimeout(() => setPendingUndo(null), UNDO_TIMEOUT_MS)
+    return () => clearTimeout(timer)
+  }, [pendingUndo])
+
   return (
     <>
-      <Header sort={sort} onSortChange={setSort} />
+      <Header
+        sort={sort}
+        onSortChange={setSort}
+        hiddenCount={hiddenCount}
+        showHidden={showHidden}
+        onToggleHidden={() => setShowHidden((v) => !v)}
+      />
       <main className="main">
         {loading && (
           <div className="loading">
@@ -37,25 +104,49 @@ function App() {
             />
           </div>
         )}
-        {error && <p className="status status-error">Failed to load: {error}</p>}
-        {!loading && !error && sortedListings.length === 0 && (
-          <p className="status">No listings yet.</p>
+        {error && (
+          <DogMessage>
+            Something went wrong fetching listings. Try again in a bit — {error}
+          </DogMessage>
         )}
-        {!loading && !error && sortedListings.length > 0 && (
+        {!loading && !error && visibleListings.length === 0 && (
+          <DogMessage>Woofing to see here...</DogMessage>
+        )}
+        {!loading && !error && visibleListings.length > 0 && (
           <>
             <p className="summary">
-              {sortedListings.length}{' '}
-              {sortedListings.length === 1 ? 'listing' : 'listings'}
-              {lastUpdated && ` · updated ${formatRelativeTime(lastUpdated)}`}
+              {visibleListings.length}{' '}
+              {showHidden
+                ? visibleListings.length === 1
+                  ? 'hidden listing'
+                  : 'hidden listings'
+                : visibleListings.length === 1
+                  ? 'listing'
+                  : 'listings'}
+              {!showHidden && lastUpdated && ` · updated ${formatRelativeTime(lastUpdated)}`}
             </p>
             <div className="grid">
-              {sortedListings.map((listing) => (
-                <ListingCard key={listing.id} listing={listing} />
+              {visibleListings.map((listing) => (
+                <ListingCard
+                  key={listing.id}
+                  listing={listing}
+                  hidden={showHidden}
+                  onHide={handleHide}
+                  onUnhide={handleUnhide}
+                />
               ))}
             </div>
           </>
         )}
       </main>
+      {pendingUndo && (
+        <div className="toast" role="status">
+          <span className="toast-text">Hidden “{pendingUndo.title}”</span>
+          <button className="toast-undo" type="button" onClick={handleUndo}>
+            Undo
+          </button>
+        </div>
+      )}
     </>
   )
 }
