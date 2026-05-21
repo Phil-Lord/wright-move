@@ -18,10 +18,10 @@ function DogMessage({ children }: { children: ReactNode }) {
   return (
     <div className="dog-message">
       <DotLottieReact
+        className="dog-animation"
         src={loadingDog}
         loop
         autoplay
-        style={{ width: 650, height: 650 }}
       />
       <p className="status">{children}</p>
     </div>
@@ -97,10 +97,10 @@ function App() {
         {loading && (
           <div className="loading">
             <DotLottieReact
+              className="dog-animation"
               src={loadingDog}
               loop
               autoplay
-              style={{ width: 650, height: 650 }}
             />
           </div>
         )}

@@ -98,6 +98,12 @@ body {
   text-align: center;
 }
 
+.dog-animation {
+  width: 650px;
+  max-width: 100%;
+  aspect-ratio: 1;
+}
+
 .dog-message .status {
   margin-top: -4rem;
 }
