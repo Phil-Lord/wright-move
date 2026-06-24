@@ -9,3 +9,11 @@
 [functions]
   directory = "../netlify/functions"
   node_bundler = "esbuild"
+
+# Keep the deployment out of search results. robots.txt blocks crawling, but a
+# URL linked from elsewhere can still be indexed without being crawled; the
+# noindex header prevents indexing outright. Personal use only — not for search.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
