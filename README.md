@@ -1,6 +1,6 @@
 # Wright Move
 
-A personal web app that aggregates rental listings from ~15 Harrogate letting agencies into a
+A personal web app that aggregates rental listings from local letting agencies into a
 single filterable view.
 
 > Personal use only — the source is public, but the deployment isn't advertised, shared, or
