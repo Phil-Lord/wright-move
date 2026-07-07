@@ -104,11 +104,7 @@ function App() {
             />
           </div>
         )}
-        {error && (
-          <DogMessage>
-            Something went wrong fetching listings. Try again in a bit — {error}
-          </DogMessage>
-        )}
+        {error && <DogMessage>{error}</DogMessage>}
         {!loading && !error && visibleListings.length === 0 && (
           <DogMessage>Woofing to see here...</DogMessage>
         )}

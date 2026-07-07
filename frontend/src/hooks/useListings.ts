@@ -12,6 +12,19 @@ interface UseListingsResult {
 const FRESHNESS_WINDOW_MS = 60 * 60 * 1000
 
 /**
+ * Turns a Supabase error message into user-facing copy.
+ *
+ * A network-level failure surfaces as 'Failed to fetch' (DNS/connection). For
+ * this app that almost always means the Supabase project has paused.
+ */
+function toUserMessage(message: string): string {
+  if (/failed to fetch/i.test(message)) {
+    return 'The listings database is asleep, restore it to load listings 💤'
+  }
+  return `Something went wrong fetching listings. Try again in a bit — ${message}`
+}
+
+/**
  * Filters listings to only include those scraped within the last hour.
  *
  * The window is relative to the most recent last_seen across all rows,
@@ -42,7 +55,7 @@ export function useListings(): UseListingsResult {
       .then(({ data, error }) => {
         if (cancelled) return
         if (error) {
-          setError(error.message)
+          setError(toUserMessage(error.message))
         } else {
           setListings(filterFresh(data as Listing[]))
         }
