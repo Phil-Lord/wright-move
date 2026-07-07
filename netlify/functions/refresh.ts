@@ -1,3 +1,3 @@
-import { triggerScrape } from './_trigger'
+import { refreshFromRequest } from './_trigger'
 
-export default async () => triggerScrape()
+export default async (request: Request) => refreshFromRequest(request)
