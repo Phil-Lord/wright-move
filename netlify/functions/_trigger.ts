@@ -57,10 +57,12 @@ export async function refreshFromRequest(request: Request): Promise<Response> {
   return triggerScrape()
 }
 
-// Enforced only when REFRESH_SECRET is set, so local dev works without it.
+// Fail closed: no REFRESH_SECRET configured means no valid secret can be
+// presented, so every request is rejected. Set REFRESH_SECRET in the
+// environment (including for local dev) to use the /refresh endpoint.
 function hasValidSecret(request: Request): boolean {
   const secret = process.env.REFRESH_SECRET
-  return !secret || request.headers.get('x-refresh-secret') === secret
+  return !!secret && request.headers.get('x-refresh-secret') === secret
 }
 
 async function ranWithinCooldown(token: string): Promise<boolean> {
