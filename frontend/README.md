@@ -7,7 +7,7 @@ filterable grid of rental cards. Deployed on Netlify.
 
 ```bash
 pnpm install
-cp .env.example .env   # fill in VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY
+cp .env.example .env   # fill in VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY
 pnpm dev
 ```
 
