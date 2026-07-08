@@ -172,6 +172,54 @@ Detailed conventions for Python testing/docstrings and TypeScript live in
 
 ---
 
+## Resuming After a Break (read first)
+
+This project may sit idle for a long time (potentially years). Before booting it back up,
+work through this gate — some of it is legal/compliance, some is rot that accumulates while
+dormant:
+
+- [ ] **Re-check each agency's `robots.txt` and terms.** Sites change both. Re-verify every
+      scraper's entrypoint is still allowed, and re-read the T&Cs of the two Cloudflare-bypass
+      sites (`belvoir.py`, `martin_and_co.py`) in particular.
+- [ ] **Re-evaluate the Cloudflare-bypass scrapers.** They use `curl_cffi` with
+      `impersonate='chrome'` to defeat an anti-bot challenge — the highest-liability part of
+      the project. Intended posture: run those two **manually / on-demand only** (not on the
+      30-min schedule) to keep the footprint minimal. Confirm that's still how they're wired.
+- [ ] **Keep the deployment private — public sharing is FORBIDDEN.** The `noindex` header and
+      `robots: Disallow: /` must stay. Personal, non-commercial use is the core legal defence
+      for aggregating and hot-linking third-party listing content; sharing the URL breaks it.
+- [ ] **Re-mint all write credentials.** They should have been revoked when the project was
+      parked (see below). Generate fresh ones and re-add them to the relevant stores.
+- [ ] **Audit dependencies for CVEs.** Two-year-old lockfiles will have known vulns. Run
+      `uv sync --upgrade` + review, `pnpm audit` / `pnpm update`, and clear the Dependabot
+      backlog before running anything.
+- [ ] **Run a fresh security/legal audit** of the whole repo (secrets, RLS, endpoints) as a
+      required step, not an optional one.
+
+### Credentials to revoke when parking / re-mint when resuming
+
+**Revoke — write access:**
+
+- **`SUPABASE_SERVICE_KEY`** — service-role key, full DB write.
+  - Stored in: GitHub Actions repo secrets.
+  - Action: can't be reset while the project is paused (API offline, key inert), and it was
+    never committed — so leave it while parked. Reset it at resume: unpause, then reset in
+    Supabase → Project Settings → API *before* re-adding it to GitHub Actions.
+- **`GITHUB_DISPATCH_TOKEN`** — PAT that triggers the workflow.
+  - Stored in: Netlify env vars.
+  - Action: revoke in GitHub → Developer settings → Personal access tokens.
+
+**Leave — inert or public:**
+
+- **`REFRESH_SECRET`** — shared secret for `/refresh`.
+  - Stored in: Netlify env vars.
+  - Action: optional to rotate; `/refresh` is dead once the PAT above is revoked.
+- **`VITE_SUPABASE_PUBLISHABLE_KEY`** — anon key, read-only via RLS.
+  - Stored in: Netlify env + shipped client bundle.
+  - Action: none — public by design.
+
+---
+
 ## Current MVP Scope
 
 - [ ] Listings as cards with direct link to agency site
